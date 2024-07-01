@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "pillarnext_explained"
+  site-url: "https://AIR-UFG.github.io/pillarnext_explained"
+  description: "PillarNeXt explained"
+  repo-branch: main
+  repo-url: "https://github.com/AIR-UFG/pillarnext_explained"
