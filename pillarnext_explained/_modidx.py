@@ -5,4 +5,4 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://AIR-UFG.github.io',
                 'git_url': 'https://github.com/AIR-UFG/pillarnext_explained',
                 'lib_path': 'pillarnext_explained'},
-  'syms': {'pillarnext_explained.core': {'pillarnext_explained.core.foo': ('core.html#foo', 'pillarnext_explained/core.py')}}}
+  'syms': {}}
