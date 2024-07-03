@@ -50,7 +50,7 @@ def points_in_rbbox(points: np.ndarray, # Float array [N, *]
     points_in_boxes_jit(points, boxes, indices)
     return indices
 
-# %% ../nbs/00_dataset.ipynb 7
+# %% ../nbs/00_dataset.ipynb 9
 class BaseDataset(Dataset):
     """An abstract class representing a pytorch-like Dataset.
     All other datasets should subclass it. All subclasses should override
@@ -156,7 +156,7 @@ class BaseDataset(Dataset):
     def format_eval(self):
         raise NotImplementedError
 
-# %% ../nbs/00_dataset.ipynb 8
+# %% ../nbs/00_dataset.ipynb 10
 def _second_det_to_nusc_box(detection):
     """
     Convert a detection output from a second model to nuScenes box format.
@@ -189,7 +189,7 @@ def _second_det_to_nusc_box(detection):
         box_list.append(box)
     return box_list
 
-# %% ../nbs/00_dataset.ipynb 9
+# %% ../nbs/00_dataset.ipynb 11
 def _lidar_nusc_box_to_global(nusc, boxes, sample_token):
     """
     Transform nuScenes boxes from the LiDAR coordinate system to the global coordinate system.
@@ -224,7 +224,7 @@ def _lidar_nusc_box_to_global(nusc, boxes, sample_token):
         box_list.append(box)
     return box_list
 
-# %% ../nbs/00_dataset.ipynb 11
+# %% ../nbs/00_dataset.ipynb 13
 # Class attribute distribution
 cls_attr_dist = {
     "barrier": {
@@ -339,7 +339,7 @@ cls_attr_dist = {
     },
 }
 
-# %% ../nbs/00_dataset.ipynb 12
+# %% ../nbs/00_dataset.ipynb 14
 def eval_main(nusc, # NuScenes dataset object.
               eval_version, # Version of the evaluation configuration to use.
               res_path, # Path to the results file.
@@ -359,7 +359,7 @@ def eval_main(nusc, # NuScenes dataset object.
     )
     _ = nusc_eval.main(plot_examples=0,)
 
-# %% ../nbs/00_dataset.ipynb 13
+# %% ../nbs/00_dataset.ipynb 15
 class NuScenesDataset(BaseDataset): # NuScenes dataset class
 
     def __init__(self,
@@ -391,7 +391,7 @@ class NuScenesDataset(BaseDataset): # NuScenes dataset class
         if resampling:
             self.cbgs()  # Resample dataset if needed
 
-    def cbgs(self): # Performs class-balanced resampling on the dataset
+    def cbgs(self): # Performs class-balanced resampling on the dataset by oversampling underrepresented classes
         _cls_infos = {name: [] for name in self._class_names}  # Initialize dictionary for class info
         for info in self.infos:  # Iterate over dataset information
             for name in set(info["gt_names"]):  # For each unique ground truth name
