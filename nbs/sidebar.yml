@@ -4,3 +4,4 @@ website:
       - index.ipynb
       - 00_dataset.ipynb
       - 01_build_loader.ipynb
+      - 02_model_utils.ipynb
