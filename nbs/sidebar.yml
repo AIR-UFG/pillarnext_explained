@@ -5,3 +5,4 @@ website:
       - 00_dataset.ipynb
       - 01_build_loader.ipynb
       - 02_model_utils.ipynb
+      - 03_model_readers.ipynb
