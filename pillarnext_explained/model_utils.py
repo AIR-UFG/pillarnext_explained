@@ -103,6 +103,7 @@ class BasicBlock(nn.Module):
         return out
 
 # %% ../nbs/02_model_utils.ipynb 10
+"""
 def replace_feature(out, new_features):
     if "replace_feature" in out.__dir__():
         # spconv 2.x behaviour
@@ -110,8 +111,19 @@ def replace_feature(out, new_features):
     else:
         out.features = new_features
         return out
+"""
 
 # %% ../nbs/02_model_utils.ipynb 11
+def replace_feature(out, new_features):
+    if "replace_feature" in out.__dir__():
+        # Use the replace_feature method for SparseConvTensor
+        return out.replace_feature(new_features)
+    else:
+        # Assuming `out` is a SparseConvTensor and it does not have replace_feature method
+        return spconv.pytorch.SparseConvTensor(new_features, out.indices, out.spatial_shape, out.batch_size)
+
+
+# %% ../nbs/02_model_utils.ipynb 12
 class SparseConvBlock(spconv.pytorch.SparseModule):
     '''
     Initializes a sparse convolutional block for 2D inputs.
@@ -146,7 +158,7 @@ class SparseConvBlock(spconv.pytorch.SparseModule):
 
         return out
 
-# %% ../nbs/02_model_utils.ipynb 12
+# %% ../nbs/02_model_utils.ipynb 14
 class SparseBasicBlock(spconv.pytorch.SparseModule):
     '''
     A basic block for sparse convolutional networks, specifically designed for 2D inputs.
@@ -177,7 +189,7 @@ class SparseBasicBlock(spconv.pytorch.SparseModule):
 
         return out
 
-# %% ../nbs/02_model_utils.ipynb 13
+# %% ../nbs/02_model_utils.ipynb 16
 class SparseConv3dBlock(spconv.pytorch.SparseModule):
     '''
     Initializes a sparse convolutional block for 3D inputs.
@@ -210,7 +222,7 @@ class SparseConv3dBlock(spconv.pytorch.SparseModule):
 
         return out
 
-# %% ../nbs/02_model_utils.ipynb 14
+# %% ../nbs/02_model_utils.ipynb 18
 class SparseBasicBlock3d(spconv.pytorch.SparseModule):
     '''
     A basic block for sparse convolutional networks, specifically designed for 3D inputs.
