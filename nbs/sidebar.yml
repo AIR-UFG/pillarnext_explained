@@ -6,3 +6,4 @@ website:
       - 01_build_loader.ipynb
       - 02_model_utils.ipynb
       - 03_model_readers.ipynb
+      - 04_model_backbones.ipynb
