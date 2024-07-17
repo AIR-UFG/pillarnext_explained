@@ -54,7 +54,7 @@ class PFNLayer(nn.Module):
             x_concatenated = torch.cat([x, x_max], dim=1)  # Otherwise, concatenate the original and max features
             return x_concatenated  # Return the concatenated features
 
-# %% ../nbs/03_model_readers.ipynb 7
+# %% ../nbs/03_model_readers.ipynb 8
 class PillarNet(nn.Module):
     """
     PillarNet.
@@ -123,7 +123,7 @@ class PillarNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../nbs/03_model_readers.ipynb 9
+# %% ../nbs/03_model_readers.ipynb 10
 class PillarFeatureNet(nn.Module):
     """
     Pillar Feature Net.
@@ -177,7 +177,7 @@ class PillarFeatureNet(nn.Module):
 
         return feat_max, coords, grid_size
 
-# %% ../nbs/03_model_readers.ipynb 14
+# %% ../nbs/03_model_readers.ipynb 15
 class DynamicVoxelEncoder(nn.Module):
     """
     Dynamic version of VoxelFeatureExtractorV3
@@ -191,7 +191,7 @@ class DynamicVoxelEncoder(nn.Module):
 
         return features
 
-# %% ../nbs/03_model_readers.ipynb 15
+# %% ../nbs/03_model_readers.ipynb 16
 class VoxelNet(nn.Module):
     """
     Dynamic voxelization for point clouds
@@ -246,7 +246,7 @@ class VoxelNet(nn.Module):
 
         return features, unq[:, [0, 3, 2, 1]], unq_inv, grid_size[[2, 1, 0]]
 
-# %% ../nbs/03_model_readers.ipynb 17
+# %% ../nbs/03_model_readers.ipynb 18
 class VoxelFeatureNet(nn.Module):
     """
     This class performs dynamic voxelization of point clouds and then encodes the voxel features using DynamicVoxelEncoder.
@@ -267,7 +267,7 @@ class VoxelFeatureNet(nn.Module):
 
         return features, coords, grid_size
 
-# %% ../nbs/03_model_readers.ipynb 22
+# %% ../nbs/03_model_readers.ipynb 23
 class PointNet(nn.Module):
     """
     Linear Process for point feature
@@ -290,8 +290,11 @@ class PointNet(nn.Module):
 
         return x
 
-# %% ../nbs/03_model_readers.ipynb 23
+# %% ../nbs/03_model_readers.ipynb 24
 class PillarVoxelNet(nn.Module):
+    """
+    This class implements the voxelization process, converting point clouds into voxel grid indices and computing features for each point relative to the voxel grid.
+    """
     def __init__(self,
                 voxel_size, # Size of voxels, only utilize x and y size
                 pc_range # Point cloud range, only utilize x and y min
@@ -342,7 +345,7 @@ class PillarVoxelNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../nbs/03_model_readers.ipynb 24
+# %% ../nbs/03_model_readers.ipynb 27
 class CylinderNet(nn.Module):
     def __init__(self,
                 voxel_size, # Size of voxels, only utilize x and y size
@@ -400,7 +403,7 @@ class CylinderNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../nbs/03_model_readers.ipynb 25
+# %% ../nbs/03_model_readers.ipynb 28
 class SingleView(nn.Module):
     """
     authoured by Beijing-jinyu
@@ -526,13 +529,13 @@ class SingleView(nn.Module):
 
         return features
 
-# %% ../nbs/03_model_readers.ipynb 26
+# %% ../nbs/03_model_readers.ipynb 32
 class MVFFeatureNet(nn.Module):
     """
     authoured by Beijing-jinyu
     """
 
-    def __init(self,
+    def __init__(self,
                 in_channels, # Number of input channels
                 voxel_size, # Size of voxels, only utilize x and y size
                 pc_range, # Point cloud range, only utilize x and y min
