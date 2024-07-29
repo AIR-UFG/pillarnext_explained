@@ -52,9 +52,9 @@ def points_in_rbbox(points: np.ndarray, # Float array [N, *]
 
 # %% ../../nbs/02_dataset.ipynb 9
 class BaseDataset(Dataset):
-    """An abstract class representing a pytorch-like Dataset.
-    All other datasets should subclass it. All subclasses should override
-    ``__getitem__`` supporting integer indexing in range from 0 to len(self) exclusive.
+    """
+    The `BaseDataset` class is designed to serve as a base class for different types of datasets.
+    It provides methods and properties for loading, processing, and evaluating data, making it easier to handle different datasets in a consistent manner.
     """
 
     def __init__(
@@ -339,13 +339,16 @@ cls_attr_dist = {
     },
 }
 
-# %% ../../nbs/02_dataset.ipynb 14
+# %% ../../nbs/02_dataset.ipynb 15
 def eval_main(nusc, # NuScenes dataset object.
               eval_version, # Version of the evaluation configuration to use.
               res_path, # Path to the results file.
               eval_set, # The dataset split to evaluate on (e.g., 'val', 'test').
               output_dir # Directory to store the evaluation results.
               ):
+    """
+    Evaluate the detection results on the nuScenes dataset.
+    """
 
     cfg = config_factory(eval_version)
 
@@ -359,8 +362,12 @@ def eval_main(nusc, # NuScenes dataset object.
     )
     _ = nusc_eval.main(plot_examples=0,)
 
-# %% ../../nbs/02_dataset.ipynb 15
+# %% ../../nbs/02_dataset.ipynb 16
 class NuScenesDataset(BaseDataset): # NuScenes dataset class
+    """
+    The `NuScenesDataset` class is designed to handle the NuScenes dataset.
+    This class inherits from the `BaseDataset` class and includes methods to load, process, and evaluate data from the NuScenes dataset.
+    """
 
     def __init__(self,
                  info_path,  # Path to dataset information file
