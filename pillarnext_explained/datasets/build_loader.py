@@ -44,14 +44,14 @@ def collate(batch_list):
 
     return ret
 
-# %% ../../nbs/03_build_loader.ipynb 6
+# %% ../../nbs/03_build_loader.ipynb 7
 def build_dataloader(dataset, # Dataset object
                      batch_size=4, # Batch size
                      num_workers=8, # Number of workers
                      shuffle:bool=False, # Shuffle the data
                      pin_memory=False # Pin memory
-                     ):
-    """This function is designed to build a DataLoader object for a given dataset."""
+                     ): # A PyTorch DataLoader instance with the specified configuration.
+    """This function is designed to build a DataLoader object for a given dataset with optional distributed training support."""
     if dist.is_initialized():
         rank = dist.get_rank()
         world_size = dist.get_world_size()
