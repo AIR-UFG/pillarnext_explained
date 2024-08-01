@@ -4,13 +4,13 @@
 __all__ = ['Conv', 'ConvBlock', 'BasicBlock', 'replace_feature', 'SparseConvBlock', 'SparseBasicBlock', 'SparseConv3dBlock',
            'SparseBasicBlock3d']
 
-# %% ../../nbs/04_model_utils.ipynb 2
+# %% ../../nbs/04_model_utils.ipynb 3
 import torch.nn as nn
 import spconv
 import spconv.pytorch
 from spconv.core import ConvAlgo
 
-# %% ../../nbs/04_model_utils.ipynb 4
+# %% ../../nbs/04_model_utils.ipynb 5
 class Conv(nn.Module):
     """
     A convolutional layer module for neural networks.
@@ -38,7 +38,7 @@ class Conv(nn.Module):
     def forward(self, x):
         return self.conv(x)
 
-# %% ../../nbs/04_model_utils.ipynb 6
+# %% ../../nbs/04_model_utils.ipynb 7
 class ConvBlock(nn.Module):
     """
     A convolutional block module combining a convolutional layer, a normalization layer, 
@@ -73,7 +73,7 @@ class ConvBlock(nn.Module):
         out = self.act(out)
         return out
 
-# %% ../../nbs/04_model_utils.ipynb 8
+# %% ../../nbs/04_model_utils.ipynb 9
 class BasicBlock(nn.Module):
     """
     A basic residual block module for neural networks.
@@ -102,8 +102,7 @@ class BasicBlock(nn.Module):
 
         return out
 
-# %% ../../nbs/04_model_utils.ipynb 10
-"""
+# %% ../../nbs/04_model_utils.ipynb 11
 def replace_feature(out, new_features):
     if "replace_feature" in out.__dir__():
         # spconv 2.x behaviour
@@ -111,17 +110,6 @@ def replace_feature(out, new_features):
     else:
         out.features = new_features
         return out
-"""
-
-# %% ../../nbs/04_model_utils.ipynb 11
-def replace_feature(out, new_features):
-    if "replace_feature" in out.__dir__():
-        # Use the replace_feature method for SparseConvTensor
-        return out.replace_feature(new_features)
-    else:
-        # Assuming `out` is a SparseConvTensor and it does not have replace_feature method
-        return spconv.pytorch.SparseConvTensor(new_features, out.indices, out.spatial_shape, out.batch_size)
-
 
 # %% ../../nbs/04_model_utils.ipynb 12
 class SparseConvBlock(spconv.pytorch.SparseModule):
