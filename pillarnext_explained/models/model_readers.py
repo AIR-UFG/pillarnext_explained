@@ -191,7 +191,7 @@ class DynamicVoxelEncoder(nn.Module):
 
         return features
 
-# %% ../../nbs/05_model_readers.ipynb 18
+# %% ../../nbs/05_model_readers.ipynb 19
 class VoxelNet(nn.Module):
     """
     Dynamic voxelization for point clouds
@@ -201,8 +201,8 @@ class VoxelNet(nn.Module):
     """
 
     def __init__(self,
-                voxel_size, # size of voxel
-                pc_range # point cloud range
+                voxel_size, # The size of each voxel in the grid. It is expected to be a 3-element list or array that defines the size of the voxel in the x, y, and z dimensions.
+                pc_range # The range of the point cloud. It's a 6-element list or array that specifies the minimum and maximum bounds in the x, y, and z dimensions.
                 ):
         super().__init__()
         self.voxel_size = np.array(voxel_size)
@@ -246,7 +246,7 @@ class VoxelNet(nn.Module):
 
         return features, unq[:, [0, 3, 2, 1]], unq_inv, grid_size[[2, 1, 0]]
 
-# %% ../../nbs/05_model_readers.ipynb 20
+# %% ../../nbs/05_model_readers.ipynb 22
 class VoxelFeatureNet(nn.Module):
     """
     This class performs dynamic voxelization of point clouds and then encodes the voxel features using DynamicVoxelEncoder.
@@ -267,7 +267,7 @@ class VoxelFeatureNet(nn.Module):
 
         return features, coords, grid_size
 
-# %% ../../nbs/05_model_readers.ipynb 25
+# %% ../../nbs/05_model_readers.ipynb 28
 class PointNet(nn.Module):
     """
     Linear Process for point feature
@@ -290,7 +290,7 @@ class PointNet(nn.Module):
 
         return x
 
-# %% ../../nbs/05_model_readers.ipynb 26
+# %% ../../nbs/05_model_readers.ipynb 29
 class PillarVoxelNet(nn.Module):
     """
     This class implements the voxelization process, converting point clouds into voxel grid indices and computing features for each point relative to the voxel grid.
@@ -345,7 +345,7 @@ class PillarVoxelNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../../nbs/05_model_readers.ipynb 29
+# %% ../../nbs/05_model_readers.ipynb 32
 class CylinderNet(nn.Module):
     def __init__(self,
                 voxel_size, # Size of voxels, only utilize x and y size
@@ -403,7 +403,7 @@ class CylinderNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../../nbs/05_model_readers.ipynb 30
+# %% ../../nbs/05_model_readers.ipynb 33
 class SingleView(nn.Module):
     """
     authoured by Beijing-jinyu
@@ -529,7 +529,7 @@ class SingleView(nn.Module):
 
         return features
 
-# %% ../../nbs/05_model_readers.ipynb 34
+# %% ../../nbs/05_model_readers.ipynb 37
 class MVFFeatureNet(nn.Module):
     """
     authoured by Beijing-jinyu
