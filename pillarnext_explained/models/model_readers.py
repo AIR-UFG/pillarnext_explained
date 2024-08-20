@@ -290,14 +290,14 @@ class PointNet(nn.Module):
 
         return x
 
-# %% ../../nbs/05_model_readers.ipynb 29
+# %% ../../nbs/05_model_readers.ipynb 30
 class PillarVoxelNet(nn.Module):
     """
     This class implements the voxelization process, converting point clouds into voxel grid indices and computing features for each point relative to the voxel grid.
     """
     def __init__(self,
-                voxel_size, # Size of voxels, only utilize x and y size
-                pc_range # Point cloud range, only utilize x and y min
+                voxel_size, # Size of of each voxel in the grid, only utilize x and y size.
+                pc_range # Point cloud range. Only utilize x and y min.
                 ):
         super().__init__()
         self.voxel_size = np.array(voxel_size)
@@ -345,10 +345,10 @@ class PillarVoxelNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../../nbs/05_model_readers.ipynb 32
+# %% ../../nbs/05_model_readers.ipynb 34
 class CylinderNet(nn.Module):
     def __init__(self,
-                voxel_size, # Size of voxels, only utilize x and y size
+                voxel_size, # Size of each voxel, only utilize x and y size
                 pc_range # Point cloud range, only utilize x and y min
                 ):
         super().__init__()
@@ -403,7 +403,7 @@ class CylinderNet(nn.Module):
 
         return features, unq[:, [0, 2, 1]], unq_inv, grid_size[[1, 0]]
 
-# %% ../../nbs/05_model_readers.ipynb 33
+# %% ../../nbs/05_model_readers.ipynb 36
 class SingleView(nn.Module):
     """
     authoured by Beijing-jinyu
@@ -529,7 +529,7 @@ class SingleView(nn.Module):
 
         return features
 
-# %% ../../nbs/05_model_readers.ipynb 37
+# %% ../../nbs/05_model_readers.ipynb 39
 class MVFFeatureNet(nn.Module):
     """
     authoured by Beijing-jinyu
