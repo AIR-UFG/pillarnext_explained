@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Model: utils – pillarnext_explained</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Model: utils – pillarnext_explained">
+<meta property="og:description" content="PillarNeXt explained">
+<meta property="og:site_name" content="pillarnext_explained">
+<meta name="twitter:title" content="Model: utils – pillarnext_explained">
+<meta name="twitter:description" content="PillarNeXt explained">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">pillarnext_explained</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./model_utils.html">Model: utils</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">pillarnext_explained</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dataset</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./build_loader.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">build loader</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_utils.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Model: utils</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_readers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: readers</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_backbones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: backbones</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_necks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: necks</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#module-differences-and-limitations" id="toc-module-differences-and-limitations" class="nav-link active" data-scroll-target="#module-differences-and-limitations">Module differences and limitations</a></li>
+  <li><a href="#conv" id="toc-conv" class="nav-link" data-scroll-target="#conv">Conv</a></li>
+  <li><a href="#convblock" id="toc-convblock" class="nav-link" data-scroll-target="#convblock">ConvBlock</a></li>
+  <li><a href="#basicblock" id="toc-basicblock" class="nav-link" data-scroll-target="#basicblock">BasicBlock</a></li>
+  <li><a href="#sparseconvblock" id="toc-sparseconvblock" class="nav-link" data-scroll-target="#sparseconvblock">SparseConvBlock</a></li>
+  <li><a href="#sparsebasicblock" id="toc-sparsebasicblock" class="nav-link" data-scroll-target="#sparsebasicblock">SparseBasicBlock</a></li>
+  <li><a href="#sparseconv3dblock" id="toc-sparseconv3dblock" class="nav-link" data-scroll-target="#sparseconv3dblock">SparseConv3dBlock</a></li>
+  <li><a href="#sparsebasicblock3d" id="toc-sparsebasicblock3d" class="nav-link" data-scroll-target="#sparsebasicblock3d">SparseBasicBlock3d</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/AIR-UFG/pillarnext_explained/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Model: utils</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>These classes define various convolutional blocks for both dense (regular) and sparse convolutional neural networks (CNNs), abstracting some of the complexities and repetitive code that is often encountered when building such networks directly using PyTorch. Below is an explanation of what these classes are doing, their differences from standard PyTorch implementations, and their limitations.</p>
+<section id="module-differences-and-limitations" class="level3">
+<h3 class="anchored" data-anchor-id="module-differences-and-limitations">Module differences and limitations</h3>
+<section id="differences-from-pytorch-direct-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="differences-from-pytorch-direct-implementation">Differences from PyTorch Direct Implementation</h4>
+<ul>
+<li><strong>Abstraction</strong>: These classes encapsulate common patterns (convolution + normalization + activation) into single modules, reducing repetitive code and making the network definitions more concise and easier to read.</li>
+<li><strong>Configuration</strong>: They provide a higher-level interface for configuring layers, automatically setting common parameters such as padding.</li>
+<li><strong>Sparse Convolution Support</strong>: The sparse convolution blocks use the <code>spconv</code> library, which is not part of standard PyTorch, to handle sparse input data more efficiently.</li>
+</ul>
+</section>
+<section id="parameters-abstracted-from-pytorch-direct-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-abstracted-from-pytorch-direct-implementation">Parameters Abstracted from PyTorch Direct Implementation</h4>
+<ul>
+<li><strong>Padding Calculation</strong>: Automatically calculates padding based on the kernel size if not provided.</li>
+<li><strong>Layer Initialization</strong>: Automatically initializes convolutional, normalization, and activation layers within the block, so users don’t need to explicitly define each component.</li>
+<li><strong>Residual Connections</strong>: For the basic blocks, the residual connections (identity mappings) are integrated within the block, simplifying the addition of these connections.</li>
+</ul>
+</section>
+<section id="limitations" class="level4">
+<h4 class="anchored" data-anchor-id="limitations">Limitations</h4>
+<ul>
+<li><strong>Flexibility</strong>: While these classes simplify the creation of common patterns, they can be less flexible than directly using PyTorch when non-standard configurations or additional customizations are required.</li>
+<li><strong>Dependency on <code>spconv</code></strong>: The sparse convolution blocks depend on the <code>spconv</code> library, which might not be as widely used or supported as PyTorch’s native functionality.</li>
+<li><strong>Debugging</strong>: Abstracting layers into higher-level blocks can make debugging more difficult, as the internal operations are hidden away. Users may need to dig into the class implementations to troubleshoot issues.</li>
+<li><strong>Performance Overhead</strong>: Although the abstraction can simplify code, it might introduce slight performance overhead due to additional function calls and encapsulation.</li>
+</ul>
+<p>Overall, these classes provide a convenient and structured way to build CNNs, particularly when using common patterns and when working with sparse data. However, for highly customized or performance-critical applications, a more direct approach using PyTorch’s lower-level APIs might be preferable.</p>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L14" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+</section>
+<section id="conv" class="level3">
+<h3 class="anchored" data-anchor-id="conv">Conv</h3>
+<blockquote class="blockquote">
+<pre><code> Conv (inplanes:int, planes:int, kernel_size:int, stride:int,
+       conv_layer:torch.nn.modules.module.Module=&lt;class
+       'torch.nn.modules.conv.Conv2d'&gt;, bias:bool=False, **kwargs)</code></pre>
+</blockquote>
+<p>*A convolutional layer module for neural networks.</p>
+<p>This class is a wrapper around the specified convolutional layer type, providing a convenient way to include convolutional layers in neural networks with customizable parameters such as input channels, output channels, kernel size, stride, and padding.*</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>inplanes</td>
+<td>int</td>
+<td></td>
+<td>The number of input channels.</td>
+</tr>
+<tr class="even">
+<td>planes</td>
+<td>int</td>
+<td></td>
+<td>The number of output channels.</td>
+</tr>
+<tr class="odd">
+<td>kernel_size</td>
+<td>int</td>
+<td></td>
+<td>The size of the convolving kernel.</td>
+</tr>
+<tr class="even">
+<td>stride</td>
+<td>int</td>
+<td></td>
+<td>The stride of the convolution.</td>
+</tr>
+<tr class="odd">
+<td>conv_layer</td>
+<td>Module</td>
+<td>Conv2d</td>
+<td>The convolutional layer class to be used.</td>
+</tr>
+<tr class="even">
+<td>bias</td>
+<td>bool</td>
+<td>False</td>
+<td>If <code>True</code>, adds a learnable bias to the output.</td>
+</tr>
+<tr class="odd">
+<td>kwargs</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-4" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Conv(nn.Module):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A convolutional layer module for neural networks.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This class is a wrapper around the specified convolutional layer type, </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    providing a convenient way to include convolutional layers in neural networks </span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    with customizable parameters such as input channels, output channels, kernel size, </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    stride, and padding.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                 inplanes:<span class="bu">int</span>, <span class="co"># The number of input channels.</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                 planes:<span class="bu">int</span>, <span class="co"># The number of output channels.</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                 kernel_size:<span class="bu">int</span>, <span class="co"># The size of the convolving kernel.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                 stride:<span class="bu">int</span>, <span class="co"># The stride of the convolution.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                 conv_layer:nn.Module<span class="op">=</span>nn.Conv2d, <span class="co"># The convolutional layer class to be used.</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                 bias:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span>, <span class="co"># If `True`, adds a learnable bias to the output.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                 <span class="op">**</span>kwargs <span class="co"># Arbitrary keyword arguments. Currently supports 'padding'.</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(Conv, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        padding <span class="op">=</span> kwargs.get(<span class="st">'padding'</span>, kernel_size <span class="op">//</span> <span class="dv">2</span>)  <span class="co"># dafault same size</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.conv <span class="op">=</span> conv_layer(inplanes, planes, kernel_size<span class="op">=</span>kernel_size, stride<span class="op">=</span>stride,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                               padding<span class="op">=</span>padding, bias<span class="op">=</span>bias)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.conv(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-5" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define input tensor with shape (batch_size, in_channels, height, width)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> torch.randn(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">64</span>, <span class="dv">64</span>)  <span class="co"># Example with batch_size=1, in_channels=3, height=64, width=64</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an instance of the Conv class</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>conv_layer <span class="op">=</span> Conv(inplanes<span class="op">=</span><span class="dv">3</span>, planes<span class="op">=</span><span class="dv">16</span>, kernel_size<span class="op">=</span><span class="dv">3</span>, stride<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the input tensor through the convolutional layer</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> conv_layer(input_tensor)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the shape of the output tensor</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output tensor shape:"</span>, output_tensor.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Output tensor shape: torch.Size([1, 16, 64, 64])</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L42" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="convblock" class="level3">
+<h3 class="anchored" data-anchor-id="convblock">ConvBlock</h3>
+<blockquote class="blockquote">
+<pre><code> ConvBlock (inplanes:int, planes:int, kernel_size:int, stride:int=1,
+            conv_layer:torch.nn.modules.module.Module=&lt;class
+            'torch.nn.modules.conv.Conv2d'&gt;,
+            norm_layer:torch.nn.modules.module.Module=&lt;class
+            'torch.nn.modules.batchnorm.BatchNorm2d'&gt;,
+            act_layer:torch.nn.modules.module.Module=&lt;class
+            'torch.nn.modules.activation.ReLU'&gt;, **kwargs)</code></pre>
+</blockquote>
+<p>*A convolutional block module combining a convolutional layer, a normalization layer, and an activation layer.</p>
+<p>This class encapsulates a common pattern found in neural networks, where a convolution is followed by batch normalization and a non-linear activation function. It provides a convenient way to stack these operations into a single module.*</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>inplanes</td>
+<td>int</td>
+<td></td>
+<td>The number of input channels.</td>
+</tr>
+<tr class="even">
+<td>planes</td>
+<td>int</td>
+<td></td>
+<td>The number of output channels.</td>
+</tr>
+<tr class="odd">
+<td>kernel_size</td>
+<td>int</td>
+<td></td>
+<td>The size of the convolving kernel.</td>
+</tr>
+<tr class="even">
+<td>stride</td>
+<td>int</td>
+<td>1</td>
+<td>The stride of the convolution.</td>
+</tr>
+<tr class="odd">
+<td>conv_layer</td>
+<td>Module</td>
+<td>Conv2d</td>
+<td>The convolutional layer class to be used.</td>
+</tr>
+<tr class="even">
+<td>norm_layer</td>
+<td>Module</td>
+<td>BatchNorm2d</td>
+<td>The normalization layer class to be used.</td>
+</tr>
+<tr class="odd">
+<td>act_layer</td>
+<td>Module</td>
+<td>ReLU</td>
+<td>The activation function class to be used.</td>
+</tr>
+<tr class="even">
+<td>kwargs</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div id="cell-7" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ConvBlock(nn.Module):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A convolutional block module combining a convolutional layer, a normalization layer, </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    and an activation layer.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    This class encapsulates a common pattern found in neural networks, where a convolution </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    is followed by batch normalization and a non-linear activation function. It provides </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    a convenient way to stack these operations into a single module.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                 inplanes: <span class="bu">int</span>, <span class="co"># The number of input channels.</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                 planes: <span class="bu">int</span>, <span class="co"># The number of output channels.</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                 kernel_size: <span class="bu">int</span>, <span class="co"># The size of the convolving kernel.</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                 stride:<span class="bu">int</span><span class="op">=</span><span class="dv">1</span>, <span class="co"># The stride of the convolution.</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                 conv_layer:nn.Module<span class="op">=</span>nn.Conv2d, <span class="co"># The convolutional layer class to be used.</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                 norm_layer:nn.Module<span class="op">=</span>nn.BatchNorm2d, <span class="co"># The normalization layer class to be used.</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                 act_layer:nn.Module<span class="op">=</span>nn.ReLU, <span class="co"># The activation function class to be used.</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                 <span class="op">**</span>kwargs <span class="co"># Arbitrary keyword arguments. Currently supports 'padding'.</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(ConvBlock, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        padding <span class="op">=</span> kwargs.get(<span class="st">'padding'</span>, kernel_size <span class="op">//</span> <span class="dv">2</span>)  <span class="co"># dafault same size</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.conv <span class="op">=</span> Conv(inplanes, planes, kernel_size<span class="op">=</span>kernel_size, stride<span class="op">=</span>stride,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                               padding<span class="op">=</span>padding, bias<span class="op">=</span><span class="va">False</span>, conv_layer<span class="op">=</span>conv_layer)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm <span class="op">=</span> norm_layer(planes)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act <span class="op">=</span> act_layer()</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.conv(x)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.norm(out)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.act(out)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define an instance of the ConvBlock</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>conv_block <span class="op">=</span> ConvBlock(inplanes<span class="op">=</span><span class="dv">3</span>, planes<span class="op">=</span><span class="dv">16</span>, kernel_size<span class="op">=</span><span class="dv">3</span>, stride<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dummy input tensor with shape (batch_size, channels, height, width)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dummy_input <span class="op">=</span> torch.randn(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">64</span>, <span class="dv">64</span>)  <span class="co"># Example: batch size of 1, 3 input channels, 64x64 image</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the dummy input through the ConvBlock</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> conv_block(dummy_input)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the shape of the output tensor</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output shape:"</span>, output.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Output shape: torch.Size([1, 16, 64, 64])</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L77" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="basicblock" class="level3">
+<h3 class="anchored" data-anchor-id="basicblock">BasicBlock</h3>
+<blockquote class="blockquote">
+<pre><code> BasicBlock (inplanes:int, kernel_size:int=3)</code></pre>
+</blockquote>
+<p>*A basic residual block module for neural networks.</p>
+<p>This class implements a basic version of the residual block, consisting of two convolutional blocks followed by an addition operation with the input (identity) and an activation function. It is a fundamental component in ResNet architectures, allowing for the training of very deep networks by addressing the vanishing gradient problem.*</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>inplanes</td>
+<td>int</td>
+<td></td>
+<td>Number of input channels</td>
+</tr>
+<tr class="even">
+<td>kernel_size</td>
+<td>int</td>
+<td>3</td>
+<td>Size of the convolving kernel</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-10" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BasicBlock(nn.Module):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A basic residual block module for neural networks.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This class implements a basic version of the residual block, consisting of two convolutional </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    blocks followed by an addition operation with the input (identity) and an activation function. </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    It is a fundamental component in ResNet architectures, allowing for the training of very deep </span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">    networks by addressing the vanishing gradient problem.</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                 inplanes:<span class="bu">int</span>, <span class="co"># Number of input channels</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                 kernel_size:<span class="bu">int</span><span class="op">=</span><span class="dv">3</span> <span class="co"># Size of the convolving kernel</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(BasicBlock, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.block1 <span class="op">=</span> ConvBlock(inplanes, inplanes, kernel_size<span class="op">=</span>kernel_size)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.block2 <span class="op">=</span> ConvBlock(inplanes, inplanes, kernel_size<span class="op">=</span>kernel_size)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act <span class="op">=</span> nn.ReLU()</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        identity <span class="op">=</span> x</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.block1(x)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.block2(out)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        out <span class="op">+=</span> identity  <span class="co"># Element-wise addition with the input tensor</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.act(out)  <span class="co"># Apply activation function</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instantiate the BasicBlock</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>basic_block <span class="op">=</span> BasicBlock(<span class="dv">64</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the structure of the basic_block to understand its components</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(basic_block)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a random tensor with shape (batch_size, channels, height, width)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's assume a batch size of 1, with 64 channels, and spatial dimensions 32x32</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> torch.randn(<span class="dv">1</span>, <span class="dv">64</span>, <span class="dv">32</span>, <span class="dv">32</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the input tensor through the BasicBlock</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> basic_block(input_tensor)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the shape of the output tensor</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Output shape:"</span>, output_tensor.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>BasicBlock(
+  (block1): ConvBlock(
+    (conv): Conv(
+      (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    )
+    (norm): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (act): ReLU()
+  )
+  (block2): ConvBlock(
+    (conv): Conv(
+      (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    )
+    (norm): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (act): ReLU()
+  )
+  (act): ReLU()
+)
+Output shape: torch.Size([1, 64, 32, 32])</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L115" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sparseconvblock" class="level3">
+<h3 class="anchored" data-anchor-id="sparseconvblock">SparseConvBlock</h3>
+<blockquote class="blockquote">
+<pre><code> SparseConvBlock (in_channels:int, out_channels:int, kernel_size:int,
+                  stride, use_subm:bool=True, bias:bool=False)</code></pre>
+</blockquote>
+<p>*Initializes a sparse convolutional block for 2D inputs.</p>
+<p>This block uses SparseConv2d for strides greater than 1 and SubMConv2d for stride equal to 1. It includes a normalization and activation layer following the convolution.*</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>in_channels</td>
+<td>int</td>
+<td></td>
+<td>Number of channels in the input tensor.</td>
+</tr>
+<tr class="even">
+<td>out_channels</td>
+<td>int</td>
+<td></td>
+<td>Number of channels produced by the convolution.</td>
+</tr>
+<tr class="odd">
+<td>kernel_size</td>
+<td>int</td>
+<td></td>
+<td>Size of the convolving kernel.</td>
+</tr>
+<tr class="even">
+<td>stride</td>
+<td></td>
+<td></td>
+<td>Stride of the convolution.</td>
+</tr>
+<tr class="odd">
+<td>use_subm</td>
+<td>bool</td>
+<td>True</td>
+<td>Whether to use SubMConv2d for stride 1.</td>
+</tr>
+<tr class="even">
+<td>bias</td>
+<td>bool</td>
+<td>False</td>
+<td>If True, adds a learnable bias to the output.</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-13" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SparseConvBlock(spconv.pytorch.SparseModule):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Initializes a sparse convolutional block for 2D inputs.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This block uses SparseConv2d for strides greater than 1 and SubMConv2d for stride equal to 1.</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">    It includes a normalization and activation layer following the convolution.</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                 in_channels: <span class="bu">int</span>, <span class="co"># Number of channels in the input tensor.</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                 out_channels: <span class="bu">int</span>, <span class="co"># Number of channels produced by the convolution.</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                 kernel_size: <span class="bu">int</span>, <span class="co"># Size of the convolving kernel.</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                 stride, <span class="co"># Stride of the convolution.</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                 use_subm:<span class="bu">bool</span><span class="op">=</span><span class="va">True</span>, <span class="co"># Whether to use SubMConv2d for stride 1.</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                 bias:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span> <span class="co"># If True, adds a learnable bias to the output.</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(SparseConvBlock, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> stride <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> use_subm:</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.conv <span class="op">=</span> spconv.pytorch.SubMConv2d(in_channels, out_channels, kernel_size,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                                                  padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span>bias,)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.conv <span class="op">=</span> spconv.pytorch.SparseConv2d(in_channels, out_channels, kernel_size,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                                                    padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>, stride<span class="op">=</span>stride, bias<span class="op">=</span>bias)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm <span class="op">=</span> nn.BatchNorm1d(out_channels, eps<span class="op">=</span><span class="fl">1e-3</span>, momentum<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act <span class="op">=</span> nn.ReLU()</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.conv(x)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.norm(out.features))</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.act(out.features))</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-14" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> spconv.pytorch.SparseConvTensor(features<span class="op">=</span>torch.randn(<span class="dv">5</span>, <span class="dv">3</span>).to(DEVICE),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                                               indices<span class="op">=</span>torch.randint(<span class="dv">0</span>, <span class="dv">10</span>, (<span class="dv">5</span>, <span class="dv">3</span>), dtype<span class="op">=</span>torch.int32).to(DEVICE),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                                               spatial_shape<span class="op">=</span>[<span class="dv">10</span>, <span class="dv">10</span>],</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                                               batch_size<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>conv_block <span class="op">=</span> SparseConvBlock(<span class="dv">3</span>, <span class="dv">16</span>, <span class="dv">3</span>, <span class="dv">1</span>).to(DEVICE)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> conv_block(input_tensor)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output_tensor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SparseConvTensor[shape=torch.Size([5, 16])]</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L150" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sparsebasicblock" class="level3">
+<h3 class="anchored" data-anchor-id="sparsebasicblock">SparseBasicBlock</h3>
+<blockquote class="blockquote">
+<pre><code> SparseBasicBlock (channels:int, kernel_size)</code></pre>
+</blockquote>
+<p>*A basic block for sparse convolutional networks, specifically designed for 2D inputs.</p>
+<p>This block consists of two convolutional layers, each followed by normalization and activation. The output of the second convolutional layer is added to the input feature map (residual connection) before applying the final activation function.*</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>channels</td>
+<td>int</td>
+<td>Number of channels in the input tensor.</td>
+</tr>
+<tr class="even">
+<td>kernel_size</td>
+<td></td>
+<td>Size of the convolving kernel.</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-16" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SparseBasicBlock(spconv.pytorch.SparseModule):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A basic block for sparse convolutional networks, specifically designed for 2D inputs.</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This block consists of two convolutional layers, each followed by normalization and activation.</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">    The output of the second convolutional layer is added to the input feature map (residual connection)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">    before applying the final activation function.</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                 channels:<span class="bu">int</span>, <span class="co"># Number of channels in the input tensor.</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                 kernel_size <span class="co"># Size of the convolving kernel.</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(SparseBasicBlock, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.block1 <span class="op">=</span> SparseConvBlock(channels, channels, kernel_size, <span class="dv">1</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.conv2 <span class="op">=</span> spconv.pytorch.SubMConv2d(channels, channels, kernel_size, padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                               stride<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="va">False</span>, algo<span class="op">=</span>ConvAlgo.Native, )</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm2 <span class="op">=</span> nn.BatchNorm1d(channels, eps<span class="op">=</span><span class="fl">1e-3</span>, momentum<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act2 <span class="op">=</span> nn.ReLU()</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        identity <span class="op">=</span> x</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.block1(x)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.conv2(out)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.norm2(out.features))</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, out.features <span class="op">+</span> identity.features)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.act2(out.features))</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> spconv.pytorch.SparseConvTensor(features<span class="op">=</span>torch.randn(<span class="dv">5</span>, <span class="dv">3</span>).to(DEVICE),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                                               indices<span class="op">=</span>torch.randint(<span class="dv">0</span>, <span class="dv">10</span>, (<span class="dv">5</span>, <span class="dv">3</span>), dtype<span class="op">=</span>torch.int32).to(DEVICE),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                                               spatial_shape<span class="op">=</span>[<span class="dv">10</span>, <span class="dv">10</span>],</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                                               batch_size<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>basic_block <span class="op">=</span> SparseBasicBlock(<span class="dv">3</span>, <span class="dv">3</span>).to(DEVICE)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> basic_block(input_tensor)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output_tensor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SparseConvTensor[shape=torch.Size([5, 3])]</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L181" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sparseconv3dblock" class="level3">
+<h3 class="anchored" data-anchor-id="sparseconv3dblock">SparseConv3dBlock</h3>
+<blockquote class="blockquote">
+<pre><code> SparseConv3dBlock (in_channels:int, out_channels:int, kernel_size,
+                    stride, use_subm:bool=True)</code></pre>
+</blockquote>
+<p>*Initializes a sparse convolutional block for 3D inputs.</p>
+<p>This block uses SparseConv3d for strides greater than 1 and SubMConv3d for stride equal to 1. It includes a normalization and activation layer following the convolution.*</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>in_channels</td>
+<td>int</td>
+<td></td>
+<td>Number of channels in the input tensor.</td>
+</tr>
+<tr class="even">
+<td>out_channels</td>
+<td>int</td>
+<td></td>
+<td>Number of channels produced by the convolution.</td>
+</tr>
+<tr class="odd">
+<td>kernel_size</td>
+<td></td>
+<td></td>
+<td>Size of the convolving kernel.</td>
+</tr>
+<tr class="even">
+<td>stride</td>
+<td></td>
+<td></td>
+<td>Stride of the convolution.</td>
+</tr>
+<tr class="odd">
+<td>use_subm</td>
+<td>bool</td>
+<td>True</td>
+<td>Whether to use SubMConv3d for stride 1.</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-19" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SparseConv3dBlock(spconv.pytorch.SparseModule):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Initializes a sparse convolutional block for 3D inputs.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This block uses SparseConv3d for strides greater than 1 and SubMConv3d for stride equal to 1.</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">    It includes a normalization and activation layer following the convolution.</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                in_channels: <span class="bu">int</span>, <span class="co"># Number of channels in the input tensor.</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                out_channels: <span class="bu">int</span>, <span class="co"># Number of channels produced by the convolution.</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                kernel_size, <span class="co"># Size of the convolving kernel.</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                stride, <span class="co"># Stride of the convolution.</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                use_subm:<span class="bu">bool</span><span class="op">=</span><span class="va">True</span> <span class="co"># Whether to use SubMConv3d for stride 1.</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>                ):</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(SparseConv3dBlock, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> stride <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> use_subm:</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.conv <span class="op">=</span> spconv.pytorch.SubMConv3d(in_channels, out_channels, kernel_size, padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>                                                  stride<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.conv <span class="op">=</span> spconv.pytorch.SparseConv3d(in_channels, out_channels, kernel_size, padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                                                    stride<span class="op">=</span>stride, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm <span class="op">=</span> nn.BatchNorm1d(out_channels, eps<span class="op">=</span><span class="fl">1e-3</span>, momentum<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act <span class="op">=</span> nn.ReLU()</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.conv(x)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.norm(out.features))</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.act(out.features))</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> spconv.pytorch.SparseConvTensor(features<span class="op">=</span>torch.randn(<span class="dv">5</span>, <span class="dv">3</span>).to(DEVICE),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                                               indices<span class="op">=</span>torch.randint(<span class="dv">0</span>, <span class="dv">10</span>, (<span class="dv">5</span>, <span class="dv">4</span>), dtype<span class="op">=</span>torch.int32).to(DEVICE),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                               spatial_shape<span class="op">=</span>[<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>],</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                                               batch_size<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>conv3d_block <span class="op">=</span> SparseConv3dBlock(<span class="dv">3</span>, <span class="dv">16</span>, <span class="dv">3</span>, <span class="dv">1</span>).to(DEVICE)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> conv3d_block(input_tensor)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output_tensor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SparseConvTensor[shape=torch.Size([5, 16])]</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/models/model_utils.py#L214" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sparsebasicblock3d" class="level3">
+<h3 class="anchored" data-anchor-id="sparsebasicblock3d">SparseBasicBlock3d</h3>
+<blockquote class="blockquote">
+<pre><code> SparseBasicBlock3d (channels:int, kernel_size)</code></pre>
+</blockquote>
+<p>*A basic block for sparse convolutional networks, specifically designed for 3D inputs.</p>
+<p>This block consists of two convolutional layers, each followed by normalization and activation. The output of the second convolutional layer is added to the input feature map (residual connection) before applying the final activation function.*</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>channels</td>
+<td>int</td>
+<td>Number of channels in the input tensor.</td>
+</tr>
+<tr class="even">
+<td>kernel_size</td>
+<td></td>
+<td>Size of the convolving kernel.</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-22" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SparseBasicBlock3d(spconv.pytorch.SparseModule):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A basic block for sparse convolutional networks, specifically designed for 3D inputs.</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This block consists of two convolutional layers, each followed by normalization and activation.</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">    The output of the second convolutional layer is added to the input feature map (residual connection)</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">    before applying the final activation function.</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                 channels:<span class="bu">int</span>, <span class="co"># Number of channels in the input tensor.</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                 kernel_size <span class="co"># Size of the convolving kernel.</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                 ):</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(SparseBasicBlock3d, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.block1 <span class="op">=</span> SparseConv3dBlock(channels, channels, kernel_size, <span class="dv">1</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.conv2 <span class="op">=</span> spconv.pytorch.SubMConv3d(channels, channels, kernel_size, padding<span class="op">=</span>kernel_size<span class="op">//</span><span class="dv">2</span>,</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>                                               stride<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.norm2 <span class="op">=</span> nn.BatchNorm1d(channels, eps<span class="op">=</span><span class="fl">1e-3</span>, momentum<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.act2 <span class="op">=</span> nn.ReLU()</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        identity <span class="op">=</span> x</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.block1(x)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> <span class="va">self</span>.conv2(out)</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.norm2(out.features))</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, out.features <span class="op">+</span> identity.features)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> replace_feature(out, <span class="va">self</span>.act2(out.features))</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-23" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>input_tensor <span class="op">=</span> spconv.pytorch.SparseConvTensor(features<span class="op">=</span>torch.randn(<span class="dv">5</span>, <span class="dv">3</span>).to(DEVICE),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                                       indices<span class="op">=</span>torch.randint(<span class="dv">0</span>, <span class="dv">10</span>, (<span class="dv">5</span>, <span class="dv">4</span>), dtype<span class="op">=</span>torch.int32).to(DEVICE),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                                       spatial_shape<span class="op">=</span>[<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>],</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                                       batch_size<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>basic_block3d <span class="op">=</span> SparseBasicBlock3d(<span class="dv">3</span>, <span class="dv">3</span>).to(DEVICE)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>output_tensor <span class="op">=</span> basic_block3d(input_tensor)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output_tensor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SparseConvTensor[shape=torch.Size([5, 3])]</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/AIR-UFG\.github\.io\/pillarnext_explained");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/AIR-UFG/pillarnext_explained/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

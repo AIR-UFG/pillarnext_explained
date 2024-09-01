@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Module to load and preprocess the NuScenes dataset.">
+
+<title>dataset – pillarnext_explained</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="dataset – pillarnext_explained">
+<meta property="og:description" content="Module to load and preprocess the NuScenes dataset.">
+<meta property="og:site_name" content="pillarnext_explained">
+<meta name="twitter:title" content="dataset – pillarnext_explained">
+<meta name="twitter:description" content="Module to load and preprocess the NuScenes dataset.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">pillarnext_explained</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">dataset</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">pillarnext_explained</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">dataset</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./build_loader.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">build loader</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: utils</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_readers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: readers</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_backbones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: backbones</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_necks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model: necks</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#points_in_boxes_jit" id="toc-points_in_boxes_jit" class="nav-link active" data-scroll-target="#points_in_boxes_jit">points_in_boxes_jit</a></li>
+  <li><a href="#points_in_rbbox" id="toc-points_in_rbbox" class="nav-link" data-scroll-target="#points_in_rbbox">points_in_rbbox</a></li>
+  <li><a href="#basedataset" id="toc-basedataset" class="nav-link" data-scroll-target="#basedataset">BaseDataset</a></li>
+  <li><a href="#eval_main" id="toc-eval_main" class="nav-link" data-scroll-target="#eval_main">eval_main</a></li>
+  <li><a href="#nuscenesdataset" id="toc-nuscenesdataset" class="nav-link" data-scroll-target="#nuscenesdataset">NuScenesDataset</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/AIR-UFG/pillarnext_explained/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">dataset</h1>
+</div>
+
+<div>
+  <div class="description">
+    Module to load and preprocess the NuScenes dataset.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/datasets/dataset.py#L27" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="points_in_boxes_jit" class="level3">
+<h3 class="anchored" data-anchor-id="points_in_boxes_jit">points_in_boxes_jit</h3>
+<blockquote class="blockquote">
+<pre><code> points_in_boxes_jit (points:numpy.ndarray, boxes:numpy.ndarray,
+                      indices:numpy.ndarray)</code></pre>
+</blockquote>
+<p><em>This function determines if points are within a set of 3D boxes.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>points</td>
+<td>ndarray</td>
+<td>Float array [N, *]</td>
+</tr>
+<tr class="even">
+<td>boxes</td>
+<td>ndarray</td>
+<td>Float array [M, 7] or [M, 9], with first 6 dimensions x, y, z, length, width, height, last dimension yaw angle</td>
+</tr>
+<tr class="odd">
+<td>indices</td>
+<td>ndarray</td>
+<td>Bool array of shape [N, M]</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-3" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@numba.njit</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> points_in_boxes_jit(points: np.ndarray, <span class="co"># Float array [N, *]</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                        boxes: np.ndarray, <span class="co"># Float array [M, 7] or [M, 9], with first 6 dimensions x, y, z, length, width, height, last dimension yaw angle</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        indices: np.ndarray <span class="co"># Bool array of shape [N, M]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                        ): <span class="co"># Bool array of shape [N, M]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""This function determines if points are within a set of 3D boxes."""</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    num_points <span class="op">=</span> points.shape[<span class="dv">0</span>]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    num_boxes <span class="op">=</span> boxes.shape[<span class="dv">0</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(num_boxes):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_points):</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> np.<span class="bu">abs</span>(points[i, <span class="dv">2</span>] <span class="op">-</span> boxes[j, <span class="dv">2</span>]) <span class="op">&lt;=</span> boxes[j, <span class="dv">5</span>] <span class="op">/</span> <span class="fl">2.0</span>:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                cosa <span class="op">=</span> np.cos(boxes[j, <span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                sina <span class="op">=</span> np.sin(boxes[j, <span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                shift_x <span class="op">=</span> points[i, <span class="dv">0</span>] <span class="op">-</span> boxes[j, <span class="dv">0</span>]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                shift_y <span class="op">=</span> points[i, <span class="dv">1</span>] <span class="op">-</span> boxes[j, <span class="dv">1</span>]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                local_x <span class="op">=</span> shift_x <span class="op">*</span> cosa <span class="op">+</span> shift_y <span class="op">*</span> sina</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                local_y <span class="op">=</span> <span class="op">-</span>shift_x <span class="op">*</span> sina <span class="op">+</span> shift_y <span class="op">*</span> cosa</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                indices[i, j] <span class="op">=</span> np.logical_and(np.<span class="bu">abs</span>(local_x) <span class="op">&lt;=</span> boxes[j, <span class="dv">3</span>] <span class="op">/</span> <span class="fl">2.0</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                               np.<span class="bu">abs</span>(local_y) <span class="op">&lt;=</span> boxes[j, <span class="dv">4</span>] <span class="op">/</span> <span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/datasets/dataset.py#L47" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="points_in_rbbox" class="level3">
+<h3 class="anchored" data-anchor-id="points_in_rbbox">points_in_rbbox</h3>
+<blockquote class="blockquote">
+<pre><code> points_in_rbbox (points:numpy.ndarray, boxes:numpy.ndarray)</code></pre>
+</blockquote>
+<p><em>This function determines if points are within a set of rotated 3D boxes and returns a boolean array indicating the results.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 38%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>points</td>
+<td>ndarray</td>
+<td>Float array [N, *]</td>
+</tr>
+<tr class="even">
+<td>boxes</td>
+<td>ndarray</td>
+<td>Float array [M, 7] or [M, 9], with first 6 dimensions x, y, z, length, width, height, last dimension yaw angle</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-5" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> points_in_rbbox(points: np.ndarray, <span class="co"># Float array [N, *]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                    boxes: np.ndarray <span class="co"># Float array [M, 7] or [M, 9], with first 6 dimensions x, y, z, length, width, height, last dimension yaw angle</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                    ): <span class="co"># Bool array of shape [N, M]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""This function determines if points are within a set of rotated 3D boxes and returns a boolean array indicating the results."""</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> np.zeros((points.shape[<span class="dv">0</span>], boxes.shape[<span class="dv">0</span>]), dtype<span class="op">=</span><span class="bu">bool</span>) <span class="co"># Bool array of shape [N, M]</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    points_in_boxes_jit(points, boxes, indices)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> indices</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test Data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> np.array([</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">1.0</span>],</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>],</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">3.0</span>, <span class="fl">3.0</span>, <span class="fl">3.0</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>boxes <span class="op">=</span> np.array([</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">0.0</span>],  <span class="co"># Box centered at (1,1,1) with length=2, width=2, height=2, no rotation</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, np.pi<span class="op">/</span><span class="dv">4</span>]  <span class="co"># Box centered at (2,2,2) with length=2, width=2, height=2, rotated 45 degrees</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output: array of shape (3, 2)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># For each point, we check if it is within each of the two boxes</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> points_in_rbbox(points, boxes)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Points:</span><span class="ch">\n</span><span class="st">"</span>, points)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Boxes:</span><span class="ch">\n</span><span class="st">"</span>, boxes)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Indices (Points in Boxes):</span><span class="ch">\n</span><span class="st">"</span>, indices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Points:
+ [[1. 1. 1.]
+ [2. 2. 2.]
+ [3. 3. 3.]]
+
+Boxes:
+ [[1.         1.         1.         2.         2.         2.
+  0.        ]
+ [2.         2.         2.         2.         2.         2.
+  0.78539816]]
+
+Indices (Points in Boxes):
+ [[ True False]
+ [ True  True]
+ [False False]]</code></pre>
+</div>
+</div>
+<div id="cell-7" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot points</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ax.scatter(points[:, <span class="dv">0</span>], points[:, <span class="dv">1</span>], points[:, <span class="dv">2</span>], c<span class="op">=</span><span class="st">'blue'</span>, marker<span class="op">=</span><span class="st">'o'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot boxes</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plot_boxes(ax, boxes)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set plot labels and limits</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'X'</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Y'</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">'Z'</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>ax.set_zlim(<span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_dataset_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/datasets/dataset.py#L56" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="basedataset" class="level3">
+<h3 class="anchored" data-anchor-id="basedataset">BaseDataset</h3>
+<blockquote class="blockquote">
+<pre><code> BaseDataset (root_path, info_path, sampler=None, loading_pipelines=None,
+              augmentation=None, prepare_label=None, evaluations=None,
+              create_database=False, use_gt_sampling=True)</code></pre>
+</blockquote>
+<p><em>The <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#basedataset"><code>BaseDataset</code></a> class is designed to serve as a base class for different types of datasets. It provides methods and properties for loading, processing, and evaluating data, making it easier to handle different datasets in a consistent manner.</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>root_path</td>
+<td></td>
+<td></td>
+<td>Root path of the dataset</td>
+</tr>
+<tr class="even">
+<td>info_path</td>
+<td></td>
+<td></td>
+<td>Path to the info file</td>
+</tr>
+<tr class="odd">
+<td>sampler</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Sampler for sampling data</td>
+</tr>
+<tr class="even">
+<td>loading_pipelines</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Loading pipelines</td>
+</tr>
+<tr class="odd">
+<td>augmentation</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Augmentation pipelines</td>
+</tr>
+<tr class="even">
+<td>prepare_label</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Prepare label pipelines</td>
+</tr>
+<tr class="odd">
+<td>evaluations</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Evaluation pipelines</td>
+</tr>
+<tr class="even">
+<td>create_database</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to create database</td>
+</tr>
+<tr class="odd">
+<td>use_gt_sampling</td>
+<td>bool</td>
+<td>True</td>
+<td>Whether to use ground truth sampling</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-9" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BaseDataset(Dataset):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    The `BaseDataset` class is designed to serve as a base class for different types of datasets.</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    It provides methods and properties for loading, processing, and evaluating data, making it easier to handle different datasets in a consistent manner.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            root_path, <span class="co"># Root path of the dataset</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            info_path, <span class="co"># Path to the info file</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            sampler<span class="op">=</span><span class="va">None</span>, <span class="co"># Sampler for sampling data</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            loading_pipelines<span class="op">=</span><span class="va">None</span>, <span class="co"># Loading pipelines</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            augmentation<span class="op">=</span><span class="va">None</span>, <span class="co"># Augmentation pipelines</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            prepare_label<span class="op">=</span><span class="va">None</span>, <span class="co"># Prepare label pipelines</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            evaluations<span class="op">=</span><span class="va">None</span>, <span class="co"># Evaluation pipelines</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            create_database<span class="op">=</span><span class="va">False</span>, <span class="co"># Whether to create database</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>            use_gt_sampling<span class="op">=</span><span class="va">True</span> <span class="co"># Whether to use ground truth sampling</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            ):</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._info_path <span class="op">=</span> info_path</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._root_path <span class="op">=</span> Path(root_path)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.loading_pipelines <span class="op">=</span> loading_pipelines</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.augmentations <span class="op">=</span> augmentation</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.prepare_label <span class="op">=</span> prepare_label</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.evaluations <span class="op">=</span> evaluations</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.create_database <span class="op">=</span> create_database</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.use_gt_sampling <span class="op">=</span> use_gt_sampling</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.load_infos()</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> use_gt_sampling <span class="kw">and</span> sampler <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.sampler <span class="op">=</span> sampler()</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.sampler <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.infos)</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> load_infos(<span class="va">self</span>):</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(os.path.join(<span class="va">self</span>._root_path, <span class="va">self</span>._info_path), <span class="st">"rb"</span>) <span class="im">as</span> f:</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.infos <span class="op">=</span> pickle.load(f)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> evaluation(<span class="va">self</span>):</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Dataset must provide a evaluation function to evaluate model."""</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>        <span class="co"># support different evaluation tasks</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> load_pointcloud(<span class="va">self</span>, res, info):</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> load_box3d(<span class="va">self</span>, res, info):</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>        res[<span class="st">"annotations"</span>] <span class="op">=</span> {</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>            <span class="st">'gt_boxes'</span>: info[<span class="st">"gt_boxes"</span>].astype(np.float32).copy(),</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>            <span class="st">'gt_names'</span>: np.array(info[<span class="st">"gt_names"</span>]).reshape(<span class="op">-</span><span class="dv">1</span>).copy(),</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>        info <span class="op">=</span> <span class="va">self</span>.infos[idx]</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> {<span class="st">"token"</span>: info[<span class="st">"token"</span>]}</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.loading_pipelines <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lp <span class="kw">in</span> <span class="va">self</span>.loading_pipelines:</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, lp)(res, info)</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.sampler <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>            sampled_dict <span class="op">=</span> <span class="va">self</span>.sampler.sample_all(</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">'annotations'</span>][<span class="st">'gt_boxes'</span>],</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">"annotations"</span>][<span class="st">'gt_names'</span>]</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> sampled_dict <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>                sampled_gt_names <span class="op">=</span> sampled_dict[<span class="st">"gt_names"</span>]</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>                sampled_gt_boxes <span class="op">=</span> sampled_dict[<span class="st">"gt_boxes"</span>]</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>                sampled_points <span class="op">=</span> sampled_dict[<span class="st">"points"</span>]</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>                sampled_gt_masks <span class="op">=</span> sampled_dict[<span class="st">"gt_masks"</span>]</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">'annotations'</span>][<span class="st">"gt_names"</span>] <span class="op">=</span> np.concatenate(</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>                    [res[<span class="st">'annotations'</span>][<span class="st">"gt_names"</span>], sampled_gt_names], axis<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">'annotations'</span>][<span class="st">"gt_boxes"</span>] <span class="op">=</span> np.concatenate(</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>                    [res[<span class="st">'annotations'</span>][<span class="st">"gt_boxes"</span>], sampled_gt_boxes]</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>                <span class="co"># remove points in sampled gt boxes</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>                sampled_point_indices <span class="op">=</span> points_in_rbbox(</span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>                    res[<span class="st">'points'</span>], sampled_gt_boxes[sampled_gt_masks])</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">'points'</span>] <span class="op">=</span> res[<span class="st">'points'</span>][np.logical_not(</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>                    sampled_point_indices.<span class="bu">any</span>(<span class="op">-</span><span class="dv">1</span>))]</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>                res[<span class="st">'points'</span>] <span class="op">=</span> np.concatenate(</span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>                    [sampled_points, res[<span class="st">'points'</span>]], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.augmentations <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> aug <span class="kw">in</span> <span class="va">self</span>.augmentations.values():</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> aug(res)</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.prepare_label <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _, pl <span class="kw">in</span> <span class="va">self</span>.prepare_label.items():</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> pl(res)</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="st">'annotations'</span> <span class="kw">in</span> res <span class="kw">and</span> (<span class="kw">not</span> <span class="va">self</span>.create_database):</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>            <span class="kw">del</span> res[<span class="st">'annotations'</span>]</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> format_eval(<span class="va">self</span>):</span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#eval_main"><code>eval_main</code></a> function is designed to evaluate the NuScenes dataset using a specified evaluation configuration. It follows these steps:</p>
+<ol type="1">
+<li><p><strong>Configuration Setup</strong>: The function starts by creating a configuration object using the <code>config_factory</code> function, passing in the <code>eval_version</code> parameter. This configuration specifies the evaluation settings to be used.</p></li>
+<li><p><strong>Initialization</strong>: It then initializes a <code>NuScenesEval</code> object, passing in the NuScenes dataset object (<code>nusc</code>), the evaluation configuration (<code>cfg</code>), the path to the results file (<code>res_path</code>), the dataset split to evaluate on (<code>eval_set</code>), and the directory to store the evaluation results (<code>output_dir</code>). The <code>verbose=True</code> parameter enables detailed logging during the evaluation process.</p></li>
+<li><p><strong>Evaluation</strong>: Finally, the function calls the <code>main</code> method of the <code>NuScenesEval</code> object to perform the evaluation. The <code>plot_examples=0</code> parameter indicates that no example plots should be generated during the evaluation.</p></li>
+</ol>
+<p>By organizing the evaluation process into a function, <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#eval_main"><code>eval_main</code></a> simplifies the process of setting up and running evaluations on the NuScenes dataset, ensuring that the correct configuration and parameters are used.</p>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/datasets/dataset.py#L345" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="eval_main" class="level3">
+<h3 class="anchored" data-anchor-id="eval_main">eval_main</h3>
+<blockquote class="blockquote">
+<pre><code> eval_main (nusc, eval_version, res_path, eval_set, output_dir)</code></pre>
+</blockquote>
+<p><em>Evaluate the detection results on the nuScenes dataset.</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nusc</td>
+<td>NuScenes dataset object.</td>
+</tr>
+<tr class="even">
+<td>eval_version</td>
+<td>Version of the evaluation configuration to use.</td>
+</tr>
+<tr class="odd">
+<td>res_path</td>
+<td>Path to the results file.</td>
+</tr>
+<tr class="even">
+<td>eval_set</td>
+<td>The dataset split to evaluate on (e.g., ‘val’, ‘test’).</td>
+</tr>
+<tr class="odd">
+<td>output_dir</td>
+<td>Directory to store the evaluation results.</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-12" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_main(nusc, <span class="co"># NuScenes dataset object.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>              eval_version, <span class="co"># Version of the evaluation configuration to use.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>              res_path, <span class="co"># Path to the results file.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>              eval_set, <span class="co"># The dataset split to evaluate on (e.g., 'val', 'test').</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>              output_dir <span class="co"># Directory to store the evaluation results.</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>              ):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Evaluate the detection results on the nuScenes dataset.</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    cfg <span class="op">=</span> config_factory(eval_version)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    nusc_eval <span class="op">=</span> NuScenesEval(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        nusc,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        config<span class="op">=</span>cfg,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        result_path<span class="op">=</span>res_path,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        eval_set<span class="op">=</span>eval_set,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        output_dir<span class="op">=</span>output_dir,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        verbose<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> nusc_eval.main(plot_examples<span class="op">=</span><span class="dv">0</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AIR-UFG/pillarnext_explained/blob/main/pillarnext_explained/datasets/dataset.py#L368" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="nuscenesdataset" class="level3">
+<h3 class="anchored" data-anchor-id="nuscenesdataset">NuScenesDataset</h3>
+<blockquote class="blockquote">
+<pre><code> NuScenesDataset (info_path, root_path, nsweeps, sampler=None,
+                  loading_pipelines=None, augmentation=None,
+                  prepare_label=None, class_names=[], resampling=False,
+                  evaluations=None, create_database=False,
+                  use_gt_sampling=True, version='v1.0-trainval')</code></pre>
+</blockquote>
+<p><em>The <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#nuscenesdataset"><code>NuScenesDataset</code></a> class is designed to handle the NuScenes dataset. This class inherits from the <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#basedataset"><code>BaseDataset</code></a> class and includes methods to load, process, and evaluate data from the NuScenes dataset.</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>info_path</td>
+<td></td>
+<td></td>
+<td>Path to dataset information file</td>
+</tr>
+<tr class="even">
+<td>root_path</td>
+<td></td>
+<td></td>
+<td>Path to root directory of dataset</td>
+</tr>
+<tr class="odd">
+<td>nsweeps</td>
+<td></td>
+<td></td>
+<td>Number of sweeps (LiDAR frames) to use</td>
+</tr>
+<tr class="even">
+<td>sampler</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Sampler for dataset</td>
+</tr>
+<tr class="odd">
+<td>loading_pipelines</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Loading pipelines for data processing</td>
+</tr>
+<tr class="even">
+<td>augmentation</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Data augmentation methods</td>
+</tr>
+<tr class="odd">
+<td>prepare_label</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Method for preparing labels</td>
+</tr>
+<tr class="even">
+<td>class_names</td>
+<td>list</td>
+<td>[]</td>
+<td>List of class names</td>
+</tr>
+<tr class="odd">
+<td>resampling</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to resample dataset</td>
+</tr>
+<tr class="even">
+<td>evaluations</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Evaluation methods</td>
+</tr>
+<tr class="odd">
+<td>create_database</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to create a database</td>
+</tr>
+<tr class="even">
+<td>use_gt_sampling</td>
+<td>bool</td>
+<td>True</td>
+<td>Whether to use ground truth sampling</td>
+</tr>
+<tr class="odd">
+<td>version</td>
+<td>str</td>
+<td>v1.0-trainval</td>
+<td>Dataset version</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-14" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NuScenesDataset(BaseDataset): <span class="co"># NuScenes dataset class</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    The `NuScenesDataset` class is designed to handle the NuScenes dataset.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    This class inherits from the `BaseDataset` class and includes methods to load, process, and evaluate data from the NuScenes dataset.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                 info_path,  <span class="co"># Path to dataset information file</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                 root_path,  <span class="co"># Path to root directory of dataset</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                 nsweeps,  <span class="co"># Number of sweeps (LiDAR frames) to use</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                 sampler<span class="op">=</span><span class="va">None</span>,  <span class="co"># Sampler for dataset</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                 loading_pipelines<span class="op">=</span><span class="va">None</span>,  <span class="co"># Loading pipelines for data processing</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                 augmentation<span class="op">=</span><span class="va">None</span>,  <span class="co"># Data augmentation methods</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                 prepare_label<span class="op">=</span><span class="va">None</span>,  <span class="co"># Method for preparing labels</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>                 class_names<span class="op">=</span>[],  <span class="co"># List of class names</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>                 resampling<span class="op">=</span><span class="va">False</span>,  <span class="co"># Whether to resample dataset</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                 evaluations<span class="op">=</span><span class="va">None</span>,  <span class="co"># Evaluation methods</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                 create_database<span class="op">=</span><span class="va">False</span>,  <span class="co"># Whether to create a database</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                 use_gt_sampling<span class="op">=</span><span class="va">True</span>,  <span class="co"># Whether to use ground truth sampling</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                 version<span class="op">=</span><span class="st">"v1.0-trainval"</span> <span class="co"># Dataset version</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>                 ): <span class="co"># NuScenes dataset</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>(NuScenesDataset, <span class="va">self</span>).<span class="fu">__init__</span>(</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>            root_path, info_path, sampler, loading_pipelines, augmentation, prepare_label, evaluations, create_database,</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>            use_gt_sampling<span class="op">=</span>use_gt_sampling)  <span class="co"># Initialize base class</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nsweeps <span class="op">=</span> nsweeps</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="va">self</span>.nsweeps <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">"At least input one sweep please!"</span>  <span class="co"># Ensure at least one sweep is used</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._class_names <span class="op">=</span> <span class="bu">list</span>(itertools.chain(<span class="op">*</span>[t <span class="cf">for</span> t <span class="kw">in</span> class_names]))  <span class="co"># Flatten class names list</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.version <span class="op">=</span> version</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> resampling:</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.cbgs()  <span class="co"># Resample dataset if needed</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> cbgs(<span class="va">self</span>): <span class="co"># Performs class-balanced resampling on the dataset by oversampling underrepresented classes</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>        _cls_infos <span class="op">=</span> {name: [] <span class="cf">for</span> name <span class="kw">in</span> <span class="va">self</span>._class_names}  <span class="co"># Initialize dictionary for class info</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> info <span class="kw">in</span> <span class="va">self</span>.infos:  <span class="co"># Iterate over dataset information</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> name <span class="kw">in</span> <span class="bu">set</span>(info[<span class="st">"gt_names"</span>]):  <span class="co"># For each unique ground truth name</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> name <span class="kw">in</span> <span class="va">self</span>._class_names:</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>                    _cls_infos[name].append(info)  <span class="co"># Add info to corresponding class</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>        duplicated_samples <span class="op">=</span> <span class="bu">sum</span>([<span class="bu">len</span>(v) <span class="cf">for</span> _, v <span class="kw">in</span> _cls_infos.items()])  <span class="co"># Total number of samples after duplication</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>        _cls_dist <span class="op">=</span> {k: <span class="bu">len</span>(v) <span class="op">/</span> duplicated_samples <span class="cf">for</span> k, v <span class="kw">in</span> _cls_infos.items()}  <span class="co"># Distribution of classes</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>        _nusc_infos <span class="op">=</span> []</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>        frac <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> <span class="bu">len</span>(<span class="va">self</span>._class_names)  <span class="co"># Fraction for resampling</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>        ratios <span class="op">=</span> [frac <span class="op">/</span> v <span class="cf">for</span> v <span class="kw">in</span> _cls_dist.values()]  <span class="co"># Calculate resampling ratios</span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> cls_infos, ratio <span class="kw">in</span> <span class="bu">zip</span>(<span class="bu">list</span>(_cls_infos.values()), ratios):</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>            _nusc_infos <span class="op">+=</span> np.random.choice(cls_infos, <span class="bu">int</span>(<span class="bu">len</span>(cls_infos) <span class="op">*</span> ratio)).tolist()  <span class="co"># Resample and add to infos</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.infos <span class="op">=</span> _nusc_infos  <span class="co"># Update dataset information</span></span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> read_file(<span class="va">self</span>, path, num_point_feature<span class="op">=</span><span class="dv">4</span>): <span class="co"># Reads a point cloud file and returns the points in the specified format</span></span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>        points <span class="op">=</span> np.fromfile(os.path.join(<span class="va">self</span>._root_path, path),</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>                             dtype<span class="op">=</span>np.float32).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">5</span>)[:, :num_point_feature]  <span class="co"># Read point cloud file and reshape</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> points  <span class="co"># Return points of shape (N, num_point_feature)</span></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> read_sweep(<span class="va">self</span>, sweep, min_distance<span class="op">=</span><span class="fl">1.0</span>): <span class="co"># Reads a sweep file, applies transformations, removes points too close to the origin, and returns the points and their timestamps</span></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>        points_sweep <span class="op">=</span> <span class="va">self</span>.read_file(<span class="bu">str</span>(sweep[<span class="st">"lidar_path"</span>])).T  <span class="co"># Read sweep file and transpose, shape (num_point_feature, N)</span></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>        nbr_points <span class="op">=</span> points_sweep.shape[<span class="dv">1</span>]</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sweep[<span class="st">"transform_matrix"</span>] <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>            points_sweep[:<span class="dv">3</span>, :] <span class="op">=</span> sweep[<span class="st">"transform_matrix"</span>].dot(</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>                np.vstack((points_sweep[:<span class="dv">3</span>, :], np.ones(nbr_points))))[:<span class="dv">3</span>, :]  <span class="co"># Apply transformation matrix</span></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>        points_sweep <span class="op">=</span> <span class="va">self</span>.remove_close(points_sweep, min_distance)  <span class="co"># Remove points too close to the origin</span></span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>        curr_times <span class="op">=</span> sweep[<span class="st">"time_lag"</span>] <span class="op">*</span> np.ones((<span class="dv">1</span>, points_sweep.shape[<span class="dv">1</span>]))  <span class="co"># Create current times array</span></span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> points_sweep.T, curr_times.T  <span class="co"># Return points and times of shape (N, num_point_feature), (N, 1)</span></span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> remove_close(points, radius: <span class="bu">float</span>): <span class="co"># Removes points that are too close to the origin</span></span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a><span class="co">        Removes point too close within a certain radius from origin.</span></span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a><span class="co">        :param radius: Radius below which points are removed.</span></span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>        x_filt <span class="op">=</span> np.<span class="bu">abs</span>(points[<span class="dv">0</span>, :]) <span class="op">&lt;</span> radius</span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>        y_filt <span class="op">=</span> np.<span class="bu">abs</span>(points[<span class="dv">1</span>, :]) <span class="op">&lt;</span> radius</span>
+<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>        not_close <span class="op">=</span> np.logical_not(np.logical_and(x_filt, y_filt))  <span class="co"># Create filter for points outside the radius</span></span>
+<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a>        points <span class="op">=</span> points[:, not_close]  <span class="co"># Apply filter to points</span></span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> points  <span class="co"># Return filtered points</span></span>
+<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> load_pointcloud(<span class="va">self</span>, res, info): <span class="co"># Loads a point cloud and its sweeps, concatenating them together with their timestamps</span></span>
+<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a>        lidar_path <span class="op">=</span> info[<span class="st">"lidar_path"</span>]</span>
+<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a>        points <span class="op">=</span> <span class="va">self</span>.read_file(<span class="bu">str</span>(lidar_path))  <span class="co"># Read point cloud file</span></span>
+<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a>        sweep_points_list <span class="op">=</span> [points]  <span class="co"># Initialize sweep points list</span></span>
+<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a>        sweep_times_list <span class="op">=</span> [np.zeros((points.shape[<span class="dv">0</span>], <span class="dv">1</span>))]  <span class="co"># Initialize sweep times list</span></span>
+<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(info[<span class="st">"sweeps"</span>])):  <span class="co"># Iterate over sweeps</span></span>
+<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a>            sweep <span class="op">=</span> info[<span class="st">"sweeps"</span>][i]</span>
+<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a>            points_sweep, times_sweep <span class="op">=</span> <span class="va">self</span>.read_sweep(sweep)  <span class="co"># Read each sweep</span></span>
+<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a>            sweep_points_list.append(points_sweep)  <span class="co"># Add sweep points to list</span></span>
+<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a>            sweep_times_list.append(times_sweep)  <span class="co"># Add sweep times to list</span></span>
+<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a>        points <span class="op">=</span> np.concatenate(sweep_points_list, axis<span class="op">=</span><span class="dv">0</span>)  <span class="co"># Concatenate all points</span></span>
+<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a>        times <span class="op">=</span> np.concatenate(sweep_times_list, axis<span class="op">=</span><span class="dv">0</span>).astype(points.dtype)  <span class="co"># Concatenate all times</span></span>
+<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a>        res[<span class="st">"points"</span>] <span class="op">=</span> np.hstack([points, times])  <span class="co"># Combine points and times</span></span>
+<span id="cb13-104"><a href="#cb13-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res  <span class="co"># Return updated result</span></span>
+<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> evaluation(<span class="va">self</span>, detections, output_dir<span class="op">=</span><span class="va">None</span>, testset<span class="op">=</span><span class="va">False</span>): <span class="co"># Evaluates detections against the dataset, calculates metrics, and optionally performs resampling. It returns the results or None if the evaluation is not performed</span></span>
+<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a>        version <span class="op">=</span> <span class="va">self</span>.version</span>
+<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a>        eval_set_map <span class="op">=</span> {</span>
+<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a>            <span class="st">"v1.0-mini"</span>: <span class="st">"mini_val"</span>,</span>
+<span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a>            <span class="st">"v1.0-trainval"</span>: <span class="st">"val"</span>,</span>
+<span id="cb13-112"><a href="#cb13-112" aria-hidden="true" tabindex="-1"></a>            <span class="st">"v1.0-test"</span>: <span class="st">"test"</span>,</span>
+<span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>        dets <span class="op">=</span> [v <span class="cf">for</span> _, v <span class="kw">in</span> detections.items()]  <span class="co"># Get list of detections</span></span>
+<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a>        nusc_annos <span class="op">=</span> {</span>
+<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a>            <span class="st">"results"</span>: {},</span>
+<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a>            <span class="st">"meta"</span>: <span class="va">None</span>,</span>
+<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a>        nusc <span class="op">=</span> NuScenes(version<span class="op">=</span>version, dataroot<span class="op">=</span><span class="bu">str</span>(</span>
+<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._root_path), verbose<span class="op">=</span><span class="va">True</span>)  <span class="co"># Initialize NuScenes dataset</span></span>
+<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a>        mapped_class_names <span class="op">=</span> []</span>
+<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> n <span class="kw">in</span> <span class="va">self</span>._class_names:</span>
+<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>            mapped_class_names.append(n)  <span class="co"># Map class names</span></span>
+<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> det <span class="kw">in</span> dets:  <span class="co"># Iterate over detections</span></span>
+<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>            annos <span class="op">=</span> []</span>
+<span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a>            boxes <span class="op">=</span> _second_det_to_nusc_box(det) <span class="co"># Convert detection to NuScenes box format</span></span>
+<span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a>            boxes <span class="op">=</span> _lidar_nusc_box_to_global(nusc, boxes, det[<span class="st">"token"</span>]) <span class="co"># Convert lidar boxes to global coordinates</span></span>
+<span id="cb13-133"><a href="#cb13-133" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i, box <span class="kw">in</span> <span class="bu">enumerate</span>(boxes):</span>
+<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>                name <span class="op">=</span> mapped_class_names[box.label]</span>
+<span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> np.sqrt(box.velocity[<span class="dv">0</span>] <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> box.velocity[<span class="dv">1</span>] <span class="op">**</span> <span class="dv">2</span>) <span class="op">&gt;</span> <span class="fl">0.2</span>:</span>
+<span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> name <span class="kw">in</span> [</span>
+<span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"car"</span>,</span>
+<span id="cb13-138"><a href="#cb13-138" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"construction_vehicle"</span>,</span>
+<span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"bus"</span>,</span>
+<span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"truck"</span>,</span>
+<span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"trailer"</span>,</span>
+<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a>                    ]:</span>
+<span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="st">"vehicle.moving"</span></span>
+<span id="cb13-144"><a href="#cb13-144" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">elif</span> name <span class="kw">in</span> [<span class="st">"bicycle"</span>, <span class="st">"motorcycle"</span>]:</span>
+<span id="cb13-145"><a href="#cb13-145" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="st">"cycle.with_rider"</span></span>
+<span id="cb13-146"><a href="#cb13-146" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">else</span>:</span>
+<span id="cb13-147"><a href="#cb13-147" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> name <span class="kw">in</span> [<span class="st">"pedestrian"</span>]:</span>
+<span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="st">"pedestrian.standing"</span></span>
+<span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">elif</span> name <span class="kw">in</span> [<span class="st">"bus"</span>]:</span>
+<span id="cb13-152"><a href="#cb13-152" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="st">"vehicle.parked"</span></span>
+<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">else</span>:</span>
+<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a>                        attr <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-156"><a href="#cb13-156" aria-hidden="true" tabindex="-1"></a>                nusc_anno <span class="op">=</span> {</span>
+<span id="cb13-157"><a href="#cb13-157" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"sample_token"</span>: det[<span class="st">"token"</span>],</span>
+<span id="cb13-158"><a href="#cb13-158" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"translation"</span>: box.center.tolist(),  <span class="co"># Box center coordinates</span></span>
+<span id="cb13-159"><a href="#cb13-159" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"size"</span>: box.wlh.tolist(),  <span class="co"># Box size (width, length, height)</span></span>
+<span id="cb13-160"><a href="#cb13-160" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"rotation"</span>: box.orientation.elements.tolist(),  <span class="co"># Box rotation (quaternion)</span></span>
+<span id="cb13-161"><a href="#cb13-161" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"velocity"</span>: box.velocity[:<span class="dv">2</span>].tolist(),  <span class="co"># Box velocity (x, y)</span></span>
+<span id="cb13-162"><a href="#cb13-162" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"detection_name"</span>: name,  <span class="co"># Class name</span></span>
+<span id="cb13-163"><a href="#cb13-163" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"detection_score"</span>: box.score,  <span class="co"># Detection score</span></span>
+<span id="cb13-164"><a href="#cb13-164" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"attribute_name"</span>: attr</span>
+<span id="cb13-165"><a href="#cb13-165" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> attr <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span></span>
+<span id="cb13-166"><a href="#cb13-166" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">else</span> <span class="bu">max</span>(cls_attr_dist[name].items(), key<span class="op">=</span>operator.itemgetter(<span class="dv">1</span>))[<span class="dv">0</span>],  <span class="co"># Attribute name</span></span>
+<span id="cb13-167"><a href="#cb13-167" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb13-168"><a href="#cb13-168" aria-hidden="true" tabindex="-1"></a>                annos.append(nusc_anno)</span>
+<span id="cb13-169"><a href="#cb13-169" aria-hidden="true" tabindex="-1"></a>            nusc_annos[<span class="st">"results"</span>].update({det[<span class="st">"token"</span>]: annos})  <span class="co"># Add annotations to results</span></span>
+<span id="cb13-170"><a href="#cb13-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-171"><a href="#cb13-171" aria-hidden="true" tabindex="-1"></a>        nusc_annos[<span class="st">"meta"</span>] <span class="op">=</span> {</span>
+<span id="cb13-172"><a href="#cb13-172" aria-hidden="true" tabindex="-1"></a>            <span class="st">"use_camera"</span>: <span class="va">False</span>,</span>
+<span id="cb13-173"><a href="#cb13-173" aria-hidden="true" tabindex="-1"></a>            <span class="st">"use_lidar"</span>: <span class="va">True</span>,</span>
+<span id="cb13-174"><a href="#cb13-174" aria-hidden="true" tabindex="-1"></a>            <span class="st">"use_radar"</span>: <span class="va">False</span>,</span>
+<span id="cb13-175"><a href="#cb13-175" aria-hidden="true" tabindex="-1"></a>            <span class="st">"use_map"</span>: <span class="va">False</span>,</span>
+<span id="cb13-176"><a href="#cb13-176" aria-hidden="true" tabindex="-1"></a>            <span class="st">"use_external"</span>: <span class="va">False</span>,</span>
+<span id="cb13-177"><a href="#cb13-177" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb13-178"><a href="#cb13-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-179"><a href="#cb13-179" aria-hidden="true" tabindex="-1"></a>        name <span class="op">=</span> <span class="va">self</span>._info_path.split(<span class="st">"/"</span>)[<span class="op">-</span><span class="dv">1</span>].split(<span class="st">"."</span>)[<span class="dv">0</span>]</span>
+<span id="cb13-180"><a href="#cb13-180" aria-hidden="true" tabindex="-1"></a>        res_path <span class="op">=</span> <span class="bu">str</span>(Path(output_dir) <span class="op">/</span> Path(name <span class="op">+</span> <span class="st">".json"</span>))</span>
+<span id="cb13-181"><a href="#cb13-181" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(res_path, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb13-182"><a href="#cb13-182" aria-hidden="true" tabindex="-1"></a>            json.dump(nusc_annos, f)  <span class="co"># Save annotations to JSON file</span></span>
+<span id="cb13-183"><a href="#cb13-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-184"><a href="#cb13-184" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Finish generate predictions for testset, save to </span><span class="sc">{</span>res_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-186"><a href="#cb13-186" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> testset:</span>
+<span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a>            eval_main(</span>
+<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a>                nusc,</span>
+<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a>                <span class="st">"detection_cvpr_2019"</span>,</span>
+<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a>                res_path,</span>
+<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a>                eval_set_map[<span class="va">self</span>.version],</span>
+<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a>                output_dir,</span>
+<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>            )  <span class="co"># Run evaluation</span></span>
+<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(Path(output_dir) <span class="op">/</span> <span class="st">"metrics_summary.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a>                metrics <span class="op">=</span> json.load(f)  <span class="co"># Load evaluation metrics</span></span>
+<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a>            detail <span class="op">=</span> {}</span>
+<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> <span class="ss">f"Nusc </span><span class="sc">{</span>version<span class="sc">}</span><span class="ss"> Evaluation</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb13-200"><a href="#cb13-200" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> name <span class="kw">in</span> mapped_class_names:  <span class="co"># Iterate over class names</span></span>
+<span id="cb13-201"><a href="#cb13-201" aria-hidden="true" tabindex="-1"></a>                detail[name] <span class="op">=</span> {}</span>
+<span id="cb13-202"><a href="#cb13-202" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> k, v <span class="kw">in</span> metrics[<span class="st">"label_aps"</span>][name].items():  <span class="co"># Iterate over evaluation metrics</span></span>
+<span id="cb13-203"><a href="#cb13-203" aria-hidden="true" tabindex="-1"></a>                    detail[name][<span class="ss">f"dist@</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span>] <span class="op">=</span> v</span>
+<span id="cb13-204"><a href="#cb13-204" aria-hidden="true" tabindex="-1"></a>                threshs <span class="op">=</span> <span class="st">", "</span>.join(<span class="bu">list</span>(metrics[<span class="st">"label_aps"</span>][name].keys()))  <span class="co"># Distance thresholds</span></span>
+<span id="cb13-205"><a href="#cb13-205" aria-hidden="true" tabindex="-1"></a>                scores <span class="op">=</span> <span class="bu">list</span>(metrics[<span class="st">"label_aps"</span>][name].values())  <span class="co"># Scores</span></span>
+<span id="cb13-206"><a href="#cb13-206" aria-hidden="true" tabindex="-1"></a>                mean <span class="op">=</span> <span class="bu">sum</span>(scores) <span class="op">/</span> <span class="bu">len</span>(scores)  <span class="co"># Mean score</span></span>
+<span id="cb13-207"><a href="#cb13-207" aria-hidden="true" tabindex="-1"></a>                scores <span class="op">=</span> <span class="st">", "</span>.join([<span class="ss">f"</span><span class="sc">{</span>s <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">"</span> <span class="cf">for</span> s <span class="kw">in</span> scores])  <span class="co"># Format scores</span></span>
+<span id="cb13-208"><a href="#cb13-208" aria-hidden="true" tabindex="-1"></a>                result <span class="op">+=</span> <span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> Nusc dist AP@</span><span class="sc">{</span>threshs<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb13-209"><a href="#cb13-209" aria-hidden="true" tabindex="-1"></a>                result <span class="op">+=</span> scores</span>
+<span id="cb13-210"><a href="#cb13-210" aria-hidden="true" tabindex="-1"></a>                result <span class="op">+=</span> <span class="ss">f" mean AP: </span><span class="sc">{</span>mean<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb13-211"><a href="#cb13-211" aria-hidden="true" tabindex="-1"></a>                result <span class="op">+=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb13-212"><a href="#cb13-212" aria-hidden="true" tabindex="-1"></a>            res_nusc <span class="op">=</span> {</span>
+<span id="cb13-213"><a href="#cb13-213" aria-hidden="true" tabindex="-1"></a>                <span class="st">"results"</span>: {<span class="st">"nusc"</span>: result},</span>
+<span id="cb13-214"><a href="#cb13-214" aria-hidden="true" tabindex="-1"></a>                <span class="st">"detail"</span>: {<span class="st">"nusc"</span>: detail},</span>
+<span id="cb13-215"><a href="#cb13-215" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb13-216"><a href="#cb13-216" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-217"><a href="#cb13-217" aria-hidden="true" tabindex="-1"></a>            res_nusc <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb13-218"><a href="#cb13-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-219"><a href="#cb13-219" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> res_nusc <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb13-220"><a href="#cb13-220" aria-hidden="true" tabindex="-1"></a>            res <span class="op">=</span> {</span>
+<span id="cb13-221"><a href="#cb13-221" aria-hidden="true" tabindex="-1"></a>                <span class="st">"results"</span>: {<span class="st">"nusc"</span>: res_nusc[<span class="st">"results"</span>][<span class="st">"nusc"</span>], },</span>
+<span id="cb13-222"><a href="#cb13-222" aria-hidden="true" tabindex="-1"></a>                <span class="st">"detail"</span>: {<span class="st">"eval.nusc"</span>: res_nusc[<span class="st">"detail"</span>][<span class="st">"nusc"</span>], },</span>
+<span id="cb13-223"><a href="#cb13-223" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb13-224"><a href="#cb13-224" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> res[<span class="st">'results'</span>]  <span class="co"># Return results</span></span>
+<span id="cb13-225"><a href="#cb13-225" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-226"><a href="#cb13-226" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span>  <span class="co"># Return None if no results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-15" class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>train_dataset <span class="op">=</span> NuScenesDataset(<span class="st">"infos_train_10sweeps_withvelo_filterZero.pkl"</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"/root/nuscenes-dataset/v1.0-mini"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">10</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                                class_names<span class="op">=</span>[[<span class="st">"car"</span>], [<span class="st">"truck"</span>, <span class="st">"construction_vehicle"</span>], [<span class="st">"bus"</span>, <span class="st">"trailer"</span>], [<span class="st">"barrier"</span>], [<span class="st">"motorcycle"</span>, <span class="st">"bicycle"</span>], [<span class="st">"pedestrian"</span>, <span class="st">"traffic_cone"</span>]],</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                resampling<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>cbgs</code> method in the <a href="https://AIR-UFG.github.io/pillarnext_explained/dataset.html#nuscenesdataset"><code>NuScenesDataset</code></a> class performs class-balanced resampling on the dataset. This technique is employed to address the imbalance in the number of samples for different classes within the dataset. Here is a step-by-step breakdown of how the <code>cbgs</code> method works:</p>
+<ol type="1">
+<li><p><strong>Initialize Class Information Dictionary</strong>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>_cls_infos <span class="op">=</span> {name: [] <span class="cf">for</span> name <span class="kw">in</span> <span class="va">self</span>._class_names}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This creates a dictionary where the keys are the class names, and the values are empty lists. This dictionary will store the dataset information for each class.</p></li>
+<li><p><strong>Populate Class Information Dictionary</strong>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> info <span class="kw">in</span> <span class="va">self</span>.infos:</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name <span class="kw">in</span> <span class="bu">set</span>(info[<span class="st">"gt_names"</span>]):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> name <span class="kw">in</span> <span class="va">self</span>._class_names:</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>            _cls_infos[name].append(info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The method iterates over the dataset information (<code>self.infos</code>). For each dataset entry (<code>info</code>), it checks the ground truth names (<code>info["gt_names"]</code>). If a ground truth name is in the list of class names (<code>self._class_names</code>), it adds the corresponding <code>info</code> to the list for that class in <code>_cls_infos</code>.</p></li>
+<li><p><strong>Calculate Class Distributions</strong>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>duplicated_samples <span class="op">=</span> <span class="bu">sum</span>([<span class="bu">len</span>(v) <span class="cf">for</span> _, v <span class="kw">in</span> _cls_infos.items()])</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>_cls_dist <span class="op">=</span> {k: <span class="bu">len</span>(v) <span class="op">/</span> duplicated_samples <span class="cf">for</span> k, v <span class="kw">in</span> _cls_infos.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The total number of samples after duplication is calculated (<code>duplicated_samples</code>). Then, the distribution of each class in the dataset is computed (<code>_cls_dist</code>), which is the number of samples for each class divided by the total number of samples.</p></li>
+<li><p><strong>Initialize Variables for Resampling</strong>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>_nusc_infos <span class="op">=</span> []</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>frac <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> <span class="bu">len</span>(<span class="va">self</span>._class_names)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ratios <span class="op">=</span> [frac <span class="op">/</span> v <span class="cf">for</span> v <span class="kw">in</span> _cls_dist.values()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>An empty list <code>_nusc_infos</code> is initialized to store the resampled dataset information. The fraction (<code>frac</code>) is calculated as the inverse of the number of class names. Resampling ratios are then computed for each class based on the class distribution (<code>_cls_dist</code>).</p></li>
+<li><p><strong>Perform Resampling</strong>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cls_infos, ratio <span class="kw">in</span> <span class="bu">zip</span>(<span class="bu">list</span>(_cls_infos.values()), ratios):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    _nusc_infos <span class="op">+=</span> np.random.choice(cls_infos, <span class="bu">int</span>(<span class="bu">len</span>(cls_infos) <span class="op">*</span> ratio)).tolist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For each class’s information (<code>cls_infos</code>) and its corresponding resampling ratio (<code>ratio</code>), a number of samples proportional to the ratio are randomly selected from <code>cls_infos</code> and added to <code>_nusc_infos</code>.</p></li>
+<li><p><strong>Update Dataset Information</strong>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.infos <span class="op">=</span> _nusc_infos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, the dataset information (<code>self.infos</code>) is updated with the resampled dataset information stored in <code>_nusc_infos</code>.</p></li>
+</ol>
+<p>In summary, the <code>cbgs</code> method addresses class imbalance by oversampling underrepresented classes to create a more balanced dataset. This is achieved by calculating the distribution of each class, determining resampling ratios, and then randomly selecting samples based on these ratios. The resulting balanced dataset is then used for further processing and training.</p>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test cbgs method (performs class-balanced resampling on the dataset by oversampling underrepresented classes)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Before resampling:"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cls_name <span class="kw">in</span> train_dataset._class_names:</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>cls_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> info <span class="kw">in</span> train_dataset.infos <span class="cf">if</span> cls_name <span class="kw">in</span> info[<span class="st">'gt_names'</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>train_dataset.cbgs()</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">After resampling:"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cls_name <span class="kw">in</span> train_dataset._class_names:</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>cls_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> info <span class="kw">in</span> train_dataset.infos <span class="cf">if</span> cls_name <span class="kw">in</span> info[<span class="st">'gt_names'</span>])<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before resampling:
+car: 7350
+truck: 5529
+construction_vehicle: 6160
+bus: 6002
+trailer: 1618
+barrier: 3350
+motorcycle: 3397
+bicycle: 3866
+pedestrian: 6660
+traffic_cone: 5909
+
+After resampling:
+car: 49840
+truck: 41378
+construction_vehicle: 45470
+bus: 39848
+trailer: 12492
+barrier: 26659
+motorcycle: 25617
+bicycle: 29545
+pedestrian: 47074
+traffic_cone: 44544</code></pre>
+</div>
+</div>
+<div id="cell-18" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate reading a file</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> train_dataset.read_file(<span class="st">"/root/nuscenes-dataset/v1.0-mini/samples/LIDAR_TOP/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Read points: </span><span class="sc">{</span>points<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Read points: (34752, 4)</code></pre>
+</div>
+</div>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate reading a sweep</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sweep <span class="op">=</span> {</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lidar_path"</span>: <span class="st">"/root/nuscenes-dataset/v1.0-mini/sweeps/LIDAR_TOP/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603597909.pcd.bin"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"transform_matrix"</span>: <span class="va">None</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"time_lag"</span>: <span class="fl">0.1</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>points, times <span class="op">=</span> train_dataset.read_sweep(sweep)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Read sweep points: </span><span class="sc">{</span>points<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, times: </span><span class="sc">{</span>times<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Read sweep points: (20486, 4), times: (20486, 1)</code></pre>
+</div>
+</div>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate loading a pointcloud</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> {</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lidar_path"</span>: <span class="st">"/root/nuscenes-dataset/v1.0-mini/samples/LIDAR_TOP/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sweeps"</span>: [{<span class="st">"lidar_path"</span>: <span class="st">"/root/nuscenes-dataset/v1.0-mini/sweeps/LIDAR_TOP/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603597909.pcd.bin"</span>, <span class="st">"transform_matrix"</span>: <span class="va">None</span>, <span class="st">"time_lag"</span>: <span class="fl">0.1</span>}]</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> {}</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> train_dataset.load_pointcloud(res, info)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Loaded pointcloud: </span><span class="sc">{</span>result[<span class="st">'points'</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded pointcloud: (55238, 5)</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/AIR-UFG\.github\.io\/pillarnext_explained");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/AIR-UFG/pillarnext_explained/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

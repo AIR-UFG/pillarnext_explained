@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/build_loader.html</loc>
+    <lastmod>2024-09-01T21:17:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/model_backbones.html</loc>
+    <lastmod>2024-09-01T21:17:21.810Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/index.html</loc>
+    <lastmod>2024-09-01T21:17:19.350Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/model_utils.html</loc>
+    <lastmod>2024-09-01T21:17:21.906Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/model_necks.html</loc>
+    <lastmod>2024-09-01T21:17:22.170Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/dataset.html</loc>
+    <lastmod>2024-09-01T21:17:24.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AIR-UFG.github.io/pillarnext_explained/model_readers.html</loc>
+    <lastmod>2024-09-01T21:17:22.130Z</lastmod>
+  </url>
+</urlset>
