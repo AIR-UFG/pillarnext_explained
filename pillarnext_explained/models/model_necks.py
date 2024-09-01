@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['ASPPNeck']
 
-# %% ../../nbs/07_model_necks.ipynb 2
+# %% ../../nbs/07_model_necks.ipynb 3
 import torch
 import torch.nn as nn
 from .model_utils import BasicBlock, ConvBlock
